@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/br4in/Image-Search-Abstraction-Layer#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "mongodb": "^2.2.11"
   }
 }
