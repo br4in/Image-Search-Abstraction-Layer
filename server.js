@@ -5,23 +5,27 @@ var api = require("./api.js");
 // using https://pixabay.com/api/docs/ API
 var API_KEY = '3812493-dc2f55e6076c7e0db310a0247';
 var result = [];
-var previous;
+var previousTitle;
+var previousOffset;
 
-app.get('/:url', function(request, response) {
+app.get('/api/:url', function(request, response) {
     
-    // get url string and create url for api call
+    // get url search term and offset value
     var title = request.params.url;
+    var offset = request.query.offset;
     
     // the api doesn't allow identical requests, work around it
-    if (title === previous) {
-        console.log('identical request!');
+    if (title === previousTitle && offset === previousOffset) {
+        // if the request is identical to the previous, resend the previous
+        // content without calling the API to prevent the server from crashing
         response.send(result);
     } else {
-        //clear result array
+        // empty the array to remove previous results
         result = [];
-        var URL = "http://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent(title);
+        
+        var URL = "http://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent(title)+"&per_page="+offset;
         api.get_json(URL, function(data) {
-            console.log(data.hits);
+            //console.log(data.hits);
             for (var i = 0; i < data.hits.length; i++) {
                 var obj = {
                     'pageURL': data.hits[i].pageURL,
@@ -30,11 +34,23 @@ app.get('/:url', function(request, response) {
                 };
                 result.push(obj);
             }
-        previous = title;
-        response.send(result);
+            
+            // store search in db
+            api.insertSearch(title);
+            
+            // update previous vars
+            previousTitle = title;
+            previousOffset = offset;
+        
+            // send results
+            response.send(result);
         });
     }
     
+});
+
+app.get('/latest/', function(request, response) {
+   api.getRecents(response);
 });
 
 app.listen('8080', function() {
