@@ -1,0 +1,22 @@
+{
+  "name": "image_search",
+  "version": "1.0.0",
+  "description": "Image Search Abstraction Layer",
+  "main": "server.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br4in/Image-Search-Abstraction-Layer.git"
+  },
+  "author": "br4in",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/br4in/Image-Search-Abstraction-Layer/issues"
+  },
+  "homepage": "https://github.com/br4in/Image-Search-Abstraction-Layer#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
